@@ -76,3 +76,7 @@ jobs:
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish to NPM
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_KEY }}  # Use the NPM publish key from secrets
