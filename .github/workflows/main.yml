@@ -5,6 +5,9 @@ on:
     branches:
       - main  # Trigger action on push to main branch
 
+permissions:
+  contents: write  # This grants write permissions to the token
+
 jobs:
   build:
     runs-on: ubuntu-latest
