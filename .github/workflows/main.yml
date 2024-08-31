@@ -77,7 +77,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Set up .npmrc
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}" > ~/.npmrc
+        echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+    
     - name: Publish to NPM
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_KEY }}  # Use the NPM publish key from secrets
       run: npm publish --access public  # Adjust access level if needed
