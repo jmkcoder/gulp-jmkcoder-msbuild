@@ -1,0 +1,90 @@
+import { execSync } from 'child_process';
+import * as path from 'path';
+import * as fs from 'fs';
+import { MSBUILD_VERSIONS } from './constants';
+import { MSBuildOptions } from './msbuild-options';
+import { ArchitectureService } from '../utilities/ArchitectureService';
+
+export class MSBuildFinder {
+    private buildIs64Bit: boolean;
+    private version: string;
+    private windir: string;
+
+    public constructor(options: MSBuildOptions)
+    {
+        this.buildIs64Bit = ArchitectureService.Architecture === 'x64';
+        this.version = options.toolsVersion ?? '4.0'
+        this.windir = options.windir ?? 'C:\Windows';
+    }
+
+    public findVersion(): string | null {
+        const vswherePath = path.join(process.env['ProgramFiles(x86)'] || '', 'Microsoft Visual Studio', 'Installer', 'vswhere.exe');
+    
+        if (!fs.existsSync(vswherePath)) {
+            console.error('vswhere.exe not found');
+            return null;
+        }
+    
+        try {
+            const installationsBuffer = execSync(`"${vswherePath}" -products * -requires Microsoft.Component.MSBuild -format json`);
+            const installations = JSON.parse(installationsBuffer.toString());
+    
+            const installationPaths =  installations.map((installation: any) => this.concatCorrectPath(installation.installationPath)) as string[];
+            const installedPath = this.getInstalledVersion(installationPaths);
+            
+            return installedPath
+        } catch (error: any) {
+            console.error(`Error executing vswhere: ${error.message}`);
+            return null;
+        }
+    }
+
+    concatCorrectPath(installationPath: string): string {
+        const major = (Number)(this.version.split('.')[0]);
+
+        if (major >= 16) {
+            return this.concatV16AndAbove(installationPath, this.version);
+        } else if (major <= 15) {
+            return this.concatV15AndBelow(installationPath, this.version);
+        }
+        
+        return this.concatPreV12(this.version);
+    }
+
+    concatPreV12(version: string): string {
+        var toolVersion = MSBUILD_VERSIONS[version];
+        const framework = this.buildIs64Bit ? 'Framework64' : 'Framework';
+        return path.join(this.windir, 'Microsoft.Net', framework, toolVersion, 'MSBuild.exe');
+    }
+
+    concatV15AndBelow(installationPath: string, version: string): string {
+        let x64_dir = this.buildIs64Bit ? 'amd64' : '';
+        return path.join(installationPath, 'MSBuild', version, 'Bin', x64_dir, 'MSBuild.exe');
+    }
+
+    concatV16AndAbove(installationPath: string, version: string): string {
+        if (!installationPath.includes(MSBUILD_VERSIONS[version]))
+            return '';
+
+        let x64_dir = this.buildIs64Bit ? 'amd64' : '';
+        return path.join(installationPath, 'MSBuild', 'Current', 'Bin', x64_dir, 'MSBuild.exe');
+    }
+
+    getInstalledVersion(installationPaths: string[]): string | null {
+        var installedPath: string | null = null;
+
+        for (let i = 0; i < installationPaths.length; i++) {
+            const installationPath = installationPaths[i];
+
+            if (installationPath == '')
+                continue;
+            
+            if (fs.existsSync(installationPath)) {
+              installedPath = installationPath;
+              break;
+            }
+          }
+
+        return installedPath;
+    }
+}

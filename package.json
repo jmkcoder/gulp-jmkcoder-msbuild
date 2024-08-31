@@ -1,0 +1,39 @@
+{
+    "name": "gulp-jmkcoder-msbuild",
+    "version": "0.1.0",
+    "description": "msbuild plugin for gulp. Inspired by gulp-msbuild.",
+    "keywords": [
+        "gulpplugin",
+        "msbuild",
+        "xbuild"
+    ],
+    "contributors": [
+        {
+            "name": "Jordan Min Kive",
+            "email": "jordan.minkive@outlook.com",
+            "url": "https://github.com/jmkcoder"
+        }
+    ],
+    "repository": "jmkcoder/gulp-jmkcoder-msbuild",
+    "scripts": {
+        "build": "tsc",
+        "start": "ts-node src/index.ts"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.17.7",
+        "@types/node": "^22.5.1",
+        "@types/through2": "^2.0.41",
+        "@types/uuid": "^10.0.0",
+        "@types/vinyl": "^2.0.12",
+        "lodash": "^4.17.21",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.5.4"
+    },
+    "dependencies": {
+        "glob": "^11.0.0",
+        "node": "^22.7.0",
+        "through2": "^4.0.2",
+        "uuid": "^10.0.0",
+        "vinyl": "^3.0.0"
+    }
+}
