@@ -39,7 +39,7 @@
         "through2": "^4.0.2",
         "uuid": "^10.0.0",
         "vinyl": "^3.0.0"
-    }
+    },
     "author": "Jordan Min Kive",
     "license": "MIT"
 }
