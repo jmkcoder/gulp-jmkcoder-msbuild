@@ -46,12 +46,18 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_ENV
         fi
 
+    - name: Configure Git User
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
     - name: Create new tag
       run: |
         git tag ${{ env.new_tag }}
         git push origin ${{ env.new_tag }}
 
     - name: Create GitHub Release
+      id: create_release  # Add an ID to reference the outputs
       uses: actions/create-release@v1
       with:
         tag_name: ${{ env.new_tag }}
