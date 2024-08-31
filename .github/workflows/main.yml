@@ -80,3 +80,4 @@ jobs:
     - name: Publish to NPM
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_KEY }}  # Use the NPM publish key from secrets
+      run: npm publish --access public  # Adjust access level if needed
