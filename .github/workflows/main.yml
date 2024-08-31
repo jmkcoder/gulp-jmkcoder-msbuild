@@ -82,5 +82,17 @@ jobs:
         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}" > ~/.npmrc
         echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
     
+    - name: Prepare Package
+      run: |
+        mkdir temp_package
+        cp -r dist/* temp_package/
+        cp package.json temp_package/
+        cp README.md temp_package/
+        cp LICENSE temp_package/
+        cd temp_package
+        npm pack  # Create a tarball from the contents
+
     - name: Publish to NPM
-      run: npm publish --access public  # Adjust access level if needed
+      run: |
+        cd temp_package
+        npm publish --access public  # Publish with public access
