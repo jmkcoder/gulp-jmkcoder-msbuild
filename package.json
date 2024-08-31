@@ -14,10 +14,10 @@
             "url": "https://github.com/jmkcoder"
         }
     ],
-    "main": "dist/index.js",  // Entry point inside dist
+    "main": "dist/index.js",
     "files": [
-        "dist"  // Only include the dist folder
-    ]
+        "dist"
+    ],
     "repository": "jmkcoder/gulp-jmkcoder-msbuild",
     "scripts": {
         "build": "tsc",
