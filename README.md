@@ -1,25 +1,29 @@
 # gulp-jmkcoder-msbuild
-msbuild plugin for gulp. Inspired by gulp-msbuild by Davyd McColl
+[![REF](https://img.shields.io/npm/v/gulp-msbuild.svg?style=flat-square)]([https://www.npmjs.com/package/gulp-msbuild])
+<br />
+<br />
+msbuild plugin for gulp. Inspired by gulp-msbuild by Davyd McColl.
 
 # gulp-msbuild
 [![NPM](https://img.shields.io/npm/v/gulp-jmkcoder-msbuild.svg?style=flat-square)](https://www.npmjs.com/package/gulp-jmkcoder-msbuild)
 [![NPM downloads](https://img.shields.io/npm/dm/gulp-jmkcoder-msbuild.svg?style=flat-square)](https://www.npmjs.com/package/gulp-jmkcoder-msbuild)
-[![REF](https://img.shields.io/npm/v/gulp-msbuild.svg?style=flat-square)]([https://www.npmjs.com/package/gulp-jmkcoder-msbuild](https://github.com/fluffynuts/gulp-msbuild))
+<br />
+<br />
 Contributions welcome.
 
 ## Usage
 
-First, install `gulp-msbuild` as a development dependency:
+First, install `gulp-jmkcoder-msbuild` as a development dependency:
 
 ```shell
-npm install --save-dev gulp-msbuild
+npm install --save-dev gulp-jmkcoder-msbuild
 ```
 
 Then, add it to your `gulpfile.js`:
 
 ```javascript
 var gulp = require("gulp");
-var msbuild = require("gulp-msbuild");
+var msbuild = require("gulp-jmkcoder-msbuild");
 
 gulp.task("default", function() {
 	return gulp.src("./project.sln")
@@ -35,7 +39,7 @@ __Example__
 
 ```javascript
 var gulp = require("gulp");
-var msbuild = require("gulp-msbuild");
+var msbuild = require("gulp-jmkcoder-msbuild");
 
 gulp.task("default", function() {
 	return gulp.src("./project.sln")
@@ -118,7 +122,7 @@ properties: { Platform: 'AnyCPU' }
 
 **Example:**
 ```javascript
-msbuild({ architecture: 'x86' })
+msbuild(new msbuildoptions.MSBuildOptions({ architecture: 'x86' }))
 ```
 
 #### properties
@@ -129,7 +133,7 @@ msbuild({ architecture: 'x86' })
 
 **Example:**
 ```javascript
-msbuild({ properties: { WarningLevel: 2 } })
+msbuild(new msbuildoptions.MSBuildOptions({ properties: { WarningLevel: 2 } }))
 ```
 
 **Hint:** Property values can use ```lodash.template``` templates (e.g. ```"<%= file.path %>"```)
@@ -173,7 +177,7 @@ msbuild({ properties: { WarningLevel: 2 } })
 
 **Example:**
 ```javascript
-msbuild({ fileLoggerParameters: 'LogFile=Build.log;Append;Verbosity=diagnostic' })
+msbuild(new msbuildoptions.MSBuildOptions({ fileLoggerParameters: 'LogFile=Build.log;Append;Verbosity=diagnostic' }))
 ```
 
 **Hint:** Logger parameters options can use ```lodash.template``` templates (e.g. ```"<%= file.path %>"```)
@@ -194,7 +198,7 @@ msbuild({ fileLoggerParameters: 'LogFile=Build.log;Append;Verbosity=diagnostic' 
 
 **Example:**
 ```javascript
-msbuild({ loggerParameters: 'XMLLogger,./MyLogger.dll;OutputAsHTML' })
+msbuild(new msbuildoptions.MSBuildOptions({ loggerParameters: 'XMLLogger,./MyLogger.dll;OutputAsHTML' }))
 ```
 
 **Hint:** Logger parameters options can use ```lodash.template``` templates (e.g. ```"<%= file.path %>"```)
@@ -208,7 +212,7 @@ msbuild({ loggerParameters: 'XMLLogger,./MyLogger.dll;OutputAsHTML' })
 
 **Example:**
 ```javascript
-msbuild({ customArgs: ['/noautoresponse'] })
+msbuild(new msbuildoptions.MSBuildOptions({ customArgs: ['/noautoresponse'] }))
 ```
 
 #### emitEndEvent
