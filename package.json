@@ -1,6 +1,6 @@
 {
     "name": "gulp-jmkcoder-msbuild",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "msbuild plugin for gulp. Inspired by gulp-msbuild.",
     "keywords": [
         "gulpplugin",
@@ -14,10 +14,7 @@
             "url": "https://github.com/jmkcoder"
         }
     ],
-    "main": "dist/index.js",
-    "files": [
-        "dist"
-    ],
+    "main": "index.js",
     "repository": "jmkcoder/gulp-jmkcoder-msbuild",
     "scripts": {
         "build": "tsc",
