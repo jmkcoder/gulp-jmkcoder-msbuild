@@ -60,7 +60,7 @@ jobs:
         git push origin ${{ env.new_tag }}
 
     - name: Create GitHub Release
-      id: create_release  # Add an ID to reference the outputs
+      id: create_release
       uses: actions/create-release@v1
       with:
         tag_name: ${{ env.new_tag }}
@@ -88,7 +88,7 @@ jobs:
     - name: Prepare Package
       run: |
         mkdir temp_package
-        cp -r dist/* temp_package/
+        cp -r dist/. temp_package/   # Copy all contents of dist, including hidden files
         cp package.json temp_package/
         cp README.md temp_package/
         cp LICENSE temp_package/
