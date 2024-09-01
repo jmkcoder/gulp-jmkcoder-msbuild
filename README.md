@@ -2,8 +2,8 @@
 msbuild plugin for gulp. Inspired by gulp-msbuild by Davyd McColl
 
 # gulp-msbuild
-[![NPM](https://img.shields.io/npm/v/gulp-msbuild.svg?style=flat-square)](https://www.npmjs.com/package/gulp-jmkcoder-msbuild)
-[![NPM downloads](https://img.shields.io/npm/dm/gulp-msbuild.svg?style=flat-square)](https://www.npmjs.com/package/gulp-jmkcoder-msbuild)
+[![NPM](https://img.shields.io/npm/v/gulp-jmkcoder-msbuild.svg?style=flat-square)](https://www.npmjs.com/package/gulp-jmkcoder-msbuild)
+[![NPM downloads](https://img.shields.io/npm/dm/gulp-jmkcoder-msbuild.svg?style=flat-square)](https://www.npmjs.com/package/gulp-jmkcoder-msbuild)
 [![REF](https://img.shields.io/npm/v/gulp-msbuild.svg?style=flat-square)]([https://www.npmjs.com/package/gulp-jmkcoder-msbuild](https://github.com/fluffynuts/gulp-msbuild))
 Contributions welcome.
 
