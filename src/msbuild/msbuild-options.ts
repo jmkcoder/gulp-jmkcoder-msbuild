@@ -41,7 +41,7 @@ export class MSBuildOptions {
             logCommand = false,
             targets = ["rebuild"],
             configuration = "Release",
-            toolsVersion = "4.0",
+            toolsVersion = "auto",
             properties = {},
             verbosity = "normal",
             maxcpucount = 0,

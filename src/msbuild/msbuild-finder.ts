@@ -13,11 +13,19 @@ export class MSBuildFinder {
     public constructor(options: MSBuildOptions)
     {
         this.buildIs64Bit = ArchitectureService.Architecture === 'x64';
-        this.version = options.toolsVersion ?? '4.0'
+        this.version = options.toolsVersion ?? 'auto'
         this.windir = options.windir ?? 'C:\Windows';
     }
 
     public findVersion(): string | null {
+        if (this.version == 'auto')
+            return this.getLatestAvailableVersion();
+
+        const parsedNumber = parseFloat(this.version);
+
+        if (isNaN(parsedNumber))
+            throw new Error('version unknown');
+
         const vswherePath = path.join(process.env['ProgramFiles(x86)'] || '', 'Microsoft Visual Studio', 'Installer', 'vswhere.exe');
     
         if (!fs.existsSync(vswherePath)) {
@@ -44,7 +52,7 @@ export class MSBuildFinder {
 
         if (major >= 16) {
             return this.concatV16AndAbove(installationPath, this.version);
-        } else if (major <= 15) {
+        } else if (major >= 12 && major <= 15) {
             return this.concatV15AndBelow(installationPath, this.version);
         }
         
@@ -52,7 +60,7 @@ export class MSBuildFinder {
     }
 
     concatPreV12(version: string): string {
-        var toolVersion = MSBUILD_VERSIONS[version];
+        let toolVersion = MSBUILD_VERSIONS[version];
         const framework = this.buildIs64Bit ? 'Framework64' : 'Framework';
         return path.join(this.windir, 'Microsoft.Net', framework, toolVersion, 'MSBuild.exe');
     }
@@ -71,7 +79,7 @@ export class MSBuildFinder {
     }
 
     getInstalledVersion(installationPaths: string[]): string | null {
-        var installedPath: string | null = null;
+        let installedPath: string | null = null;
 
         for (let i = 0; i < installationPaths.length; i++) {
             const installationPath = installationPaths[i];
@@ -86,5 +94,23 @@ export class MSBuildFinder {
           }
 
         return installedPath;
+    }
+
+    getLatestAvailableVersion(): string | null {
+        let installationPaths: string[] =  [];
+
+        for(const key in MSBUILD_VERSIONS)
+        {
+            this.version = key;
+            const installationPath = this.findVersion();
+
+            if (installationPath != null)
+                installationPaths.push(installationPath);
+        }
+
+        if (installationPaths.length === 0)
+            return null;
+
+        return installationPaths[installationPaths.length -1];
     }
 }

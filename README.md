@@ -108,9 +108,11 @@ properties: { Platform: 'AnyCPU' }
 
 > Specify the .NET Tools-Version
 
-**Default:** 4.0
+**Default:** auto
 
-**Possible Values:** 1.0, 1.1, 2.0, 3.5, 4.0, 12.0, 14.0, 15.0, 16.0, 17.0
+**Possible Values:** 1.0, 1.1, 2.0, 3.5, 4.0, 12.0, 14.0, 15.0, 16.0, 17.0, auto
+
+**auto:** will select the latest installed MSBuild version available on your machine
 
 #### architecture
 
