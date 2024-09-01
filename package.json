@@ -1,6 +1,6 @@
 {
     "name": "gulp-jmkcoder-msbuild",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "msbuild plugin for gulp. Inspired by gulp-msbuild.",
     "keywords": [
         "gulpplugin",
