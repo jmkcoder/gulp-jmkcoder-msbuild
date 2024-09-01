@@ -43,6 +43,9 @@ jobs:
         else
           # Assuming versioning follows semantic versioning: v1.0.0, v1.0.1, etc.
           new_tag=v$(echo $latest_tag | awk -F'[.]' '{print $1 "." $2 "." $3+1}')
+          while git rev-parse "refs/tags/$new_tag" >/dev/null 2>&1; do
+            new_tag=v$(echo $new_tag | awk -F'[.]' '{print $1 "." $2 "." $3+1}')
+          done
           echo "new_tag=$new_tag" >> $GITHUB_ENV
         fi
 
