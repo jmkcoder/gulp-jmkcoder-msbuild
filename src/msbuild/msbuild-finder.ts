@@ -17,7 +17,7 @@ export class MSBuildFinder {
         this.windir = options.windir ?? 'C:\Windows';
     }
 
-    public findVersion(): string | null {
+    public findVersion(): (string | null)[] | null {
         if (this.version == 'auto')
             return this.getLatestAvailableVersion();
 
@@ -40,7 +40,10 @@ export class MSBuildFinder {
             const installationPaths =  installations.map((installation: any) => this.concatCorrectPath(installation.installationPath)) as string[];
             const installedPath = this.getInstalledVersion(installationPaths);
             
-            return installedPath
+            return [
+                installedPath,
+                this.version
+            ]
         } catch (error: any) {
             console.error(`Error executing vswhere: ${error.message}`);
             return null;
@@ -96,8 +99,9 @@ export class MSBuildFinder {
         return installedPath;
     }
 
-    getLatestAvailableVersion(): string | null {
+    getLatestAvailableVersion(): (string | null)[] | null {
         let installationPaths: string[] =  [];
+        let versions: string[] = [];
 
         for(const key in MSBUILD_VERSIONS)
         {
@@ -105,12 +109,22 @@ export class MSBuildFinder {
             const installationPath = this.findVersion();
 
             if (installationPath != null)
-                installationPaths.push(installationPath);
+            {
+                if (installationPath[0] != null) {
+                    installationPaths.push(installationPath[0]);
+                    versions.push(key)
+                }
+            }
+
+            console.log(installationPath);
         }
 
         if (installationPaths.length === 0)
             return null;
 
-        return installationPaths[installationPaths.length -1];
+        return [
+            installationPaths[installationPaths.length -1],
+            versions[versions.length -1]
+        ];
     }
 }

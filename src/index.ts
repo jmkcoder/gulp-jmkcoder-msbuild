@@ -5,6 +5,7 @@ import { join } from "path";
 import { ArchitectureService } from './utilities/ArchitectureService';
 import * as os from 'os';
 import { v4 } from 'uuid';
+import msbuild from '.'
 
 export default function({
         stdout = false,
@@ -68,25 +69,26 @@ export default function({
         publishDirectory: publishDirectory
     });
 
-
     const stream = through.obj(function (file: any, enc: BufferEncoding, callback: through.TransformCallback) {
         const self = this;
+        
         if (!file || !file.path) {
-        self.push(file);
-        return callback();
+            self.push(file);
+            return callback();
         }
 
         return MSBuildRunner.startMsBuildTask(options, file, self, function (err: Error | null) {
-        if (err) {
-            return callback(err);
-        }
-        if (options.emitEndEvent) {
-            self.emit("end");
-        }
-        return callback();
+            if (err) {
+                return callback(err);
+            }
+            if (options.emitEndEvent) {
+                self.emit("end");
+            }
+            return callback();
         });
     });
 
     return stream;
 }
 
+const test = msbuild({});

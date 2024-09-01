@@ -106,7 +106,15 @@ export class MSBuildCommandBuilder {
             const version = msbuildFinder.findVersion();
 
             if (version != null)
-                options.msbuildPath = version;
+            {
+                if (version[0] != null)
+                {
+                    options.msbuildPath = version[0] ?? '';
+                    options.toolsVersion = version[1] ?? '4.0';
+                }
+                else 
+                    throw new Error(`Invalid version`);
+            }
             else 
                 throw new Error(`Invalid version`);
         }
