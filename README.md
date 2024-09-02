@@ -23,7 +23,7 @@ Then, add it to your `gulpfile.js`:
 
 ```javascript
 var gulp = require("gulp");
-var msbuild = require("gulp-jmkcoder-msbuild");
+var msbuild = require("gulp-jmkcoder-msbuild").default;
 
 gulp.task("default", function() {
 	return gulp.src("./project.sln")
@@ -39,7 +39,7 @@ __Example__
 
 ```javascript
 var gulp = require("gulp");
-var msbuild = require("gulp-jmkcoder-msbuild");
+var msbuild = require("gulp-jmkcoder-msbuild").default;
 
 gulp.task("default", function() {
 	return gulp.src("./project.sln")
