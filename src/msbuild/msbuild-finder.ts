@@ -115,8 +115,6 @@ export class MSBuildFinder {
                     versions.push(key)
                 }
             }
-
-            console.log(installationPath);
         }
 
         if (installationPaths.length === 0)
