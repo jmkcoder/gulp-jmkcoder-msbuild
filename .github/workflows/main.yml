@@ -44,7 +44,17 @@ jobs:
         fi
         echo "latest_tag=$latest_tag" >> $GITHUB_ENV
 
+    - name: Check for [skip] in PR title
+      id: check_skip
+      run: |
+        pr_title="${{ github.event.pull_request.title }}"
+        if [[ "$pr_title" == *"[skip]"* ]]; then
+          echo "skip=true" >> $GITHUB_ENV
+        else
+          echo "skip=false" >> $GITHUB_ENV
+
     - name: Determine version increment
+      if: env.skip == 'false'
       id: determine_increment
       run: |
         pr_title="${{ github.event.pull_request.title }}"
@@ -75,6 +85,7 @@ jobs:
         echo "new_tag=$new_tag" >> $GITHUB_ENV
 
     - name: Configure Git User
+      if: env.skip == 'false'
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -88,14 +99,14 @@ jobs:
         fi
 
     - name: Create new tag
-      if: steps.check_tag.outcome == 'success'
+      if:  env.skip == 'false' && steps.check_tag.outcome == 'success'
       id: create_tag
       run: |
         git tag ${{ env.new_tag }}
         git push origin ${{ env.new_tag }}
 
     - name: Create GitHub Release
-      if: steps.create_tag.outcome == 'success'
+      if: env.skip == 'false' && steps.create_tag.outcome == 'success'
       id: create_release
       uses: actions/create-release@v1
       with:
@@ -107,6 +118,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload Release Asset
+      if: env.skip == 'false'
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -117,11 +129,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up .npmrc
+      if: env.skip == 'false'
       run: |
         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}" > ~/.npmrc
         echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
     
     - name: Create temp_package
+      if: env.skip == 'false'
       run: |
         mkdir temp_package
         cp -r dist/. temp_package/   # Copy all contents of dist, including hidden files
@@ -132,6 +146,7 @@ jobs:
         npm pack  # Create a tarball from the contents
 
     - name: Publish to NPM
+      if: env.skip == 'false'
       id: publish_npm
       run: |
         cd temp_package
