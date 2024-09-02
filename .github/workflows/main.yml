@@ -48,10 +48,12 @@ jobs:
       id: check_skip
       run: |
         pr_title="${{ github.event.pull_request.title }}"
-        if [[ "$pr_title" == *"[skip]"* ]]; then
+        
+        if [[ "$pr_title" ==  "[Skip]"* ]]; then
           echo "skip=true" >> $GITHUB_ENV
         else
           echo "skip=false" >> $GITHUB_ENV
+        fi
 
     - name: Determine version increment
       if: env.skip == 'false'
