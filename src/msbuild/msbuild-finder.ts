@@ -69,16 +69,14 @@ export class MSBuildFinder {
     }
 
     concatV15AndBelow(installationPath: string, version: string): string {
-        let x64_dir = this.buildIs64Bit ? 'amd64' : '';
-        return path.join(installationPath, 'MSBuild', version, 'Bin', x64_dir, 'MSBuild.exe');
+        return path.join(installationPath, 'MSBuild', version, 'Bin', this.getx64_dir(), 'MSBuild.exe');
     }
 
     concatV16AndAbove(installationPath: string, version: string): string {
         if (!installationPath.includes(MSBUILD_VERSIONS[version]))
             return '';
 
-        let x64_dir = this.buildIs64Bit ? 'amd64' : '';
-        return path.join(installationPath, 'MSBuild', 'Current', 'Bin', x64_dir, 'MSBuild.exe');
+        return path.join(installationPath, 'MSBuild', 'Current', 'Bin', this.getx64_dir(), 'MSBuild.exe');
     }
 
     getInstalledVersion(installationPaths: string[]): string | null {
@@ -124,5 +122,9 @@ export class MSBuildFinder {
             installationPaths[installationPaths.length -1],
             versions[versions.length -1]
         ];
+    }
+
+    getx64_dir() {
+        return this.buildIs64Bit ? 'amd64' : '';
     }
 }

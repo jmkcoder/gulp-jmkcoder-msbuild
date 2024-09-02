@@ -1,4 +1,4 @@
-import { cloneDeep, intersection, template } from 'lodash';
+import { cloneDeep, template } from 'lodash';
 import { MSBuildFinder } from './msbuild-finder';
 import { MSBuildOptions } from './msbuild-options';
 import path from 'path';
