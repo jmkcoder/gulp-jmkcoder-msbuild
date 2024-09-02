@@ -5,9 +5,8 @@ import { join } from 'path';
 import { ArchitectureService } from './utilities/ArchitectureService';
 import * as os from 'os';
 import { v4 } from 'uuid';
-import msbuild from '.'
 
-export default function({
+function MSBuild({
         stdout = false,
         stderr = true,
         errorOnFail = false,
@@ -91,4 +90,5 @@ export default function({
     return stream;
 }
 
-const test = msbuild({});
+module.exports = MSBuild;
+module.exports.default = MSBuild;
