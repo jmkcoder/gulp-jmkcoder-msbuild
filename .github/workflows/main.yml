@@ -1,15 +1,15 @@
 name: Build and Release
 
 on:
-  push:
-    branches:
-      - main  # Trigger action on push to main branch
+  pull_request:
+    types: [closed]
 
 permissions:
   contents: write  # This grants write permissions to the token
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
