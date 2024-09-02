@@ -1,13 +1,14 @@
-import { exec } from "child_process";
-import { MSBuildCommandBuilder } from "./msbuild-command-builder";
-import { MSBuildOptions } from "./msbuild-options";
-import * as fs from "fs";
-import { glob } from "glob";
-import gutil from "./gutil";
+import { exec } from 'child_process';
+import { MSBuildCommandBuilder } from './msbuild-command-builder';
+import { MSBuildOptions } from './msbuild-options';
+import * as fs from 'fs';
+import { glob } from 'glob';
+import gutil from './gutil';
 
 
 export class MSBuildRunner {
     public static startMsBuildTask(options: MSBuildOptions, file: any, stream: any, callback: any) {
+        console.log('');
         const commandBuilder = new MSBuildCommandBuilder();
         const command = commandBuilder.construct(file, options);
 
@@ -25,7 +26,7 @@ export class MSBuildRunner {
             closed = true;
 
             if (error) {
-                console.log("MSBuild failed!");
+                console.log('MSBuild failed!');
 
                 if (options.errorOnFail) {
                     return callback(error);
@@ -43,11 +44,11 @@ export class MSBuildRunner {
         
             closed = true;
             if (code === 0) {
-              console.log("MSBuild complete!");
+              console.log('MSBuild complete!');
         
               if (options.emitPublishedFiles) {
                 const publishDirectory = options.publishDirectory;
-                await glob("**/*", { cwd: publishDirectory, nodir: true, absolute: true })
+                await glob('**/*', { cwd: publishDirectory, nodir: true, absolute: true })
                 .then((files: string | any[]) => {
                     for (let i = 0; i < files.length; i++) {
                         const filePath = files[i];
@@ -65,7 +66,7 @@ export class MSBuildRunner {
                 })
                 .catch((err: Error) => {
                     if (err) {
-                        const msg = "Error globbing published files at " + publishDirectory;
+                        const msg = 'Error globbing published files at ' + publishDirectory;
                         console.log(msg);
                         return callback(err);
                       }
@@ -79,10 +80,10 @@ export class MSBuildRunner {
         
               if (code) {
                 // Exited normally, but failed.
-                msg = "MSBuild failed with code " + code + "!";
+                msg = 'MSBuild failed with code ' + code + '!';
               } else {
                 // Killed by parent process.
-                msg = "MSBuild killed with signal " + signal + "!";
+                msg = 'MSBuild killed with signal ' + signal + '!';
               }
         
               console.log(msg);

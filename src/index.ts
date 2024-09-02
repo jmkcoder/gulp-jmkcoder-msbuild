@@ -1,7 +1,7 @@
-import { MSBuildOptions } from "./msbuild/msbuild-options";
+import { MSBuildOptions } from './msbuild/msbuild-options';
 import through from 'through2';
-import { MSBuildRunner } from "./msbuild/msbuild-runner";
-import { join } from "path";
+import { MSBuildRunner } from './msbuild/msbuild-runner';
+import { join } from 'path';
 import { ArchitectureService } from './utilities/ArchitectureService';
 import * as os from 'os';
 import { v4 } from 'uuid';
@@ -12,11 +12,11 @@ export default function({
         stderr = true,
         errorOnFail = false,
         logCommand = false,
-        targets = ["rebuild"],
-        configuration = "Release",
-        toolsVersion = "auto",
+        targets = ['rebuild'],
+        configuration = 'Release',
+        toolsVersion = 'auto',
         properties = {},
-        verbosity = "normal",
+        verbosity = 'normal',
         maxcpucount = 0,
         nologo = true,
         platform = process.platform,
@@ -31,10 +31,10 @@ export default function({
         emitEndEvent = false,
         solutionPlatform = undefined,
         emitPublishedFiles = false,
-        deployDefaultTarget = "WebPublish",
-        webPublishMethod = "FileSystem",
-        deleteExistingFiles = "true",
-        findDependencies = "true",
+        deployDefaultTarget = 'WebPublish',
+        webPublishMethod = 'FileSystem',
+        deleteExistingFiles = 'true',
+        findDependencies = 'true',
         publishDirectory = join(os.tmpdir(), v4())
     }) {
 
