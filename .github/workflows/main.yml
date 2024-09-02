@@ -121,15 +121,13 @@ jobs:
         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}" > ~/.npmrc
         echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
     
-    - name: Debug temp_package
+    - name: Create temp_package
       run: |
         mkdir temp_package
-        ls -la dist
         cp -r dist/. temp_package/   # Copy all contents of dist, including hidden files
         cp package.json temp_package/
         cp README.md temp_package/
         cp LICENSE temp_package/
-        ls -la temp_package  # List files in temp_package to verify
         cd temp_package
         npm pack  # Create a tarball from the contents
 
