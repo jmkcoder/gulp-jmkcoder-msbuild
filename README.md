@@ -23,7 +23,7 @@ Then, add it to your `gulpfile.js`:
 
 ```javascript
 var gulp = require("gulp");
-var msbuild = require("gulp-jmkcoder-msbuild").default;
+var msbuild = require("gulp-jmkcoder-msbuild");
 
 gulp.task("default", function() {
 	return gulp.src("./project.sln")
@@ -39,7 +39,7 @@ __Example__
 
 ```javascript
 var gulp = require("gulp");
-var msbuild = require("gulp-jmkcoder-msbuild").default;
+var msbuild = require("gulp-jmkcoder-msbuild");
 
 gulp.task("default", function() {
 	return gulp.src("./project.sln")
@@ -124,7 +124,7 @@ properties: { Platform: 'AnyCPU' }
 
 **Example:**
 ```javascript
-msbuild(new msbuildoptions.MSBuildOptions({ architecture: 'x86' }))
+msbuild({ architecture: 'x86' })
 ```
 
 #### properties
@@ -135,7 +135,7 @@ msbuild(new msbuildoptions.MSBuildOptions({ architecture: 'x86' }))
 
 **Example:**
 ```javascript
-msbuild(new msbuildoptions.MSBuildOptions({ properties: { WarningLevel: 2 } }))
+msbuild({ properties: { WarningLevel: 2 } })
 ```
 
 **Hint:** Property values can use ```lodash.template``` templates (e.g. ```"<%= file.path %>"```)
@@ -179,7 +179,7 @@ msbuild(new msbuildoptions.MSBuildOptions({ properties: { WarningLevel: 2 } }))
 
 **Example:**
 ```javascript
-msbuild(new msbuildoptions.MSBuildOptions({ fileLoggerParameters: 'LogFile=Build.log;Append;Verbosity=diagnostic' }))
+msbuild({ fileLoggerParameters: 'LogFile=Build.log;Append;Verbosity=diagnostic' })
 ```
 
 **Hint:** Logger parameters options can use ```lodash.template``` templates (e.g. ```"<%= file.path %>"```)
@@ -200,7 +200,7 @@ msbuild(new msbuildoptions.MSBuildOptions({ fileLoggerParameters: 'LogFile=Build
 
 **Example:**
 ```javascript
-msbuild(new msbuildoptions.MSBuildOptions({ loggerParameters: 'XMLLogger,./MyLogger.dll;OutputAsHTML' }))
+msbuild({ loggerParameters: 'XMLLogger,./MyLogger.dll;OutputAsHTML' })
 ```
 
 **Hint:** Logger parameters options can use ```lodash.template``` templates (e.g. ```"<%= file.path %>"```)
@@ -214,7 +214,7 @@ msbuild(new msbuildoptions.MSBuildOptions({ loggerParameters: 'XMLLogger,./MyLog
 
 **Example:**
 ```javascript
-msbuild(new msbuildoptions.MSBuildOptions({ customArgs: ['/noautoresponse'] }))
+msbuild({ customArgs: ['/noautoresponse'] })
 ```
 
 #### emitEndEvent
