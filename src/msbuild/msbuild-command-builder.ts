@@ -9,7 +9,7 @@ export class MSBuildCommandBuilder {
 
     private buildArguments(options: MSBuildOptions) {
         let args = [];
-        args.push("/target:" + options.targets?.join(";") ?? ["Rebuild"]);
+        args.push("/target:" + (options.targets ?? ["Rebuild"]).join(";"));
         args.push("/verbosity:" + options.verbosity);
 
         if (options.toolsVersion) {
