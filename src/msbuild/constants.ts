@@ -13,5 +13,6 @@ export const MSBUILD_VERSIONS: { [key: string]: string } = {
 
     // As of version 16 the tool version is current therefore to differentiate between the version we check for the year directory instead
     '16.0': '2019',
-    '17.0': '2022'
+    '17.0': '2022',
+    '18.0': '18'
 };
