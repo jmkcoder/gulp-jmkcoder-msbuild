@@ -36,75 +36,25 @@ jobs:
 
     - name: Get the latest tag
       id: get_tag
-      run: |
-        latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null)
-        if [ -z "$latest_tag" ]; then
-          latest_tag="v0.0.0"
-        fi
-        echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+      run: bash .github/scripts/get-latest-tag.sh
 
     - name: Check for [skip] in PR title
       id: check_skip
-      run: |
-        pr_title="${{ github.event.pull_request.title }}"
-        
-        if [[ "$pr_title" ==  "[Skip]"* ]]; then
-          echo "skip=true" >> $GITHUB_ENV
-        else
-          echo "skip=false" >> $GITHUB_ENV
-        fi
+      run: bash .github/scripts/check-skip.sh "${{ github.event.pull_request.title }}"
 
     - name: Determine version increment
       if: env.skip == 'false'
       id: determine_increment
-      run: |
-        pr_title="${{ github.event.pull_request.title }}"
-        latest_tag=${{ env.latest_tag }}
-
-        # Extract major, minor, and patch components from the latest tag
-        major=$(echo $latest_tag | cut -d. -f1 | sed 's/v//')
-        minor=$(echo $latest_tag | cut -d. -f2)
-        patch=$(echo $latest_tag | cut -d. -f3)
-
-        # Determine the increment type based on PR title
-        if [[ "$pr_title" == "[Major]"* ]]; then
-          major=$((major + 1))
-          minor=0
-          patch=0
-        elif [[ "$pr_title" == "[Minor]"* ]]; then
-          minor=$((minor + 1))
-          patch=0
-        elif [[ "$pr_title" == "[Patch]"* ]]; then
-          patch=$((patch + 1))
-        else
-          echo "PR title must start with [Major], [Minor], or [Patch]."
-          exit 1
-        fi
-
-        # Construct the new tag
-        new_tag="v${major}.${minor}.${patch}"
-        echo "new_tag=$new_tag" >> $GITHUB_ENV
-
-    - name: Configure Git User
-      if: env.skip == 'false'
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
+      run: bash .github/scripts/verify-pr-title.sh "${{ github.event.pull_request.title }}" "${{ env.latest_tag }}"
 
     - name: Check if tag exists on remote
       id: check_tag
-      run: |
-        if git rev-parse "refs/tags/${{ env.new_tag }}" >/dev/null 2>&1; then
-          echo "Tag ${{ env.new_tag }} already exists."
-          exit 0
-        fi
+      run: bash .github/scripts/check-tag-exists.sh "${{ env.new_tag }}"
 
     - name: Create new tag
       if:  env.skip == 'false' && steps.check_tag.outcome == 'success'
       id: create_tag
-      run: |
-        git tag ${{ env.new_tag }}
-        git push origin ${{ env.new_tag }}
+      run: bash .github/scripts/create-tag.sh "${{ env.new_tag }}"
 
     - name: Create GitHub Release
       if: env.skip == 'false' && steps.create_tag.outcome == 'success'
@@ -131,20 +81,11 @@ jobs:
 
     - name: Set up .npmrc
       if: env.skip == 'false'
-      run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_KEY }}" > ~/.npmrc
-        echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+      run: bash .github/scripts/setup-npmrc.sh "${{ secrets.NPM_PUBLISH_KEY }}"
     
     - name: Create temp_package
       if: env.skip == 'false'
-      run: |
-        mkdir temp_package
-        cp -r dist/. temp_package/   # Copy all contents of dist, including hidden files
-        cp package.json temp_package/
-        cp README.md temp_package/
-        cp LICENSE temp_package/
-        cd temp_package
-        npm pack  # Create a tarball from the contents
+      run: bash .github/scripts/create-package.sh
 
     - name: Publish to NPM
       if: env.skip == 'false'
@@ -172,29 +113,10 @@ jobs:
       with:
         name: failed-tag
 
-    - name: Configure Git User
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-
-    - name: Delete Git Tag
+    - name: Delete release and tag
       run: |
         tag=$(cat failed-tag)
-        git tag -d $tag
-        git push origin :refs/tags/$tag
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Delete GitHub Release
-      run: |
-        tag=$(cat failed-tag)
-        release_id=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                          -H "Accept: application/vnd.github.v3+json" \
-                          "https://api.github.com/repos/${{ github.repository }}/releases/tags/$tag" \
-                          | jq -r '.id')
-        curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                        -H "Accept: application/vnd.github.v3+json" \
-                        "https://api.github.com/repos/${{ github.repository }}/releases/$release_id"
+        bash .github/scripts/delete-release.sh "$tag" "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
